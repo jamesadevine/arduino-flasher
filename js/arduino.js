@@ -269,7 +269,7 @@ var arduino =   {
         {
             var hex = ihex_decode(lines[i])
 
-            if(hex.type == TYPE_DAT)
+            if(hex.type == TYPE_DAT || hex.type == TYPE_ELA)
             {
                 total += hex.len;
                 dataObjects.push(hex);
@@ -302,6 +302,22 @@ var arduino =   {
 
                 if(bufferSize - currentHex.len < bufferTotal)
                     break;
+
+                //check for Extended linear addressing...
+                if(currentHex.type == TYPE_ELA)
+                {
+                    if(bufferTotal > 0)
+                    {
+                        //break early, we're going to move to a different memory vector.
+                        bufferSize = bufferTotal;
+                        var t = buffer.slice(0,bufferTotal);
+                        buffer = t;
+                        break;
+                    }
+
+                    //set the address if applicable...
+                    address = (currentHex.address << 16);
+                }
 
                 new Uint8Array(buffer, bufferTotal, currentHex.len).set(currentHex.data);
 

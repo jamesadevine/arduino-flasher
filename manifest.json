@@ -1,6 +1,6 @@
 {
-    "name": "Hello World!",
-    "description": "My first Chrome App.",
+    "name": "Arduino Flasher",
+    "description": "Programs an arduino with a given hex file.",
     "version": "0.1",
     "manifest_version": 2,
     "app": {
