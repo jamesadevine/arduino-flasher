@@ -1,9 +1,11 @@
 var CONNECTION_ID = -1;
 
-var MAX_MS = 10000;
+var MAX_MS = 2000;
 
 const GENUINO_VENDOR_ID = 9025
 const GENUINO_PRODUCT_ID = 589
+
+const PACKET_SIZE = 4096
 
 //ARDUINO ZERO
 //const GENUINO_VENDOR_ID = 9025
@@ -290,7 +292,7 @@ var arduino =   {
         while(total > 0)
         {
 
-            var bufferSize = (total < 4096) ? total : 4096;
+            var bufferSize = (total < PACKET_SIZE) ? total : PACKET_SIZE;
 
             var buffer = new ArrayBuffer(bufferSize);
 
@@ -301,7 +303,13 @@ var arduino =   {
                 var currentHex = dataObjects[hexCount];
 
                 if(bufferSize - currentHex.len < bufferTotal)
+                {
+                    //break early, we cannot completely fill the buffer.
+                    bufferSize = bufferTotal;
+                    var t = buffer.slice(0,bufferTotal);
+                    buffer = t;
                     break;
+                }
 
                 //check for Extended linear addressing...
                 if(currentHex.type == TYPE_ELA)
