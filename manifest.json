@@ -1,0 +1,24 @@
+{
+    "name": "Hello World!",
+    "description": "My first Chrome App.",
+    "version": "0.1",
+    "manifest_version": 2,
+    "app": {
+        "background": {
+          "scripts": ["./js/background.js"]
+        }
+    },
+    "permissions": [
+        "serial",
+        "fileSystem",
+        "usb",
+        {
+            "usbDevices": [
+                {
+                    "vendorId": 3368,
+                    "productId": 516
+                }
+            ]
+        }
+    ]
+}
