@@ -2,8 +2,8 @@ var CONNECTION_ID = -1;
 
 var MAX_MS = 2000;
 
-const GENUINO_VENDOR_ID = 9025
-const GENUINO_PRODUCT_ID = 589
+const GENUINO_VENDOR_IDS = [9025]
+const GENUINO_PRODUCT_IDS = [589, 77]
 
 const PACKET_SIZE = 4096
 
@@ -112,7 +112,19 @@ function ls(){
 
             $(ports).each(function(idx, port){
                 console.log("P ",port)
-                if(port.vendorId == GENUINO_VENDOR_ID && port.productId == GENUINO_PRODUCT_ID)
+
+                var vendorMatch = false;
+                var pIDMatch = false;
+
+                for(var i = 0; i < GENUINO_VENDOR_IDS.length; i++)
+                    if(port.vendorId == GENUINO_VENDOR_IDS[i])
+                        vendorMatch = true;
+
+                for(var i = 0; i < GENUINO_PRODUCT_IDS.length; i++)
+                    if(port.productId == GENUINO_PRODUCT_IDS[i])
+                        pIDMatch = true;
+
+                if(vendorMatch && pIDMatch)
                     if(port.path.indexOf("tty") > 0)
                         retPorts.push(port);
                     else if(window.navigator.appVersion.indexOf("Windows") > -1)
