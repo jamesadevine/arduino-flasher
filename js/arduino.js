@@ -106,10 +106,18 @@ function ls(){
         chrome.serial.getDevices(function(ports){
             var retPorts = []
 
+            console.log(chrome.app, window.navigator);
+
+
+
             $(ports).each(function(idx, port){
                 console.log("P ",port)
-                if(port.vendorId == GENUINO_VENDOR_ID && port.productId == GENUINO_PRODUCT_ID && port.path.indexOf("tty") > 0)
-                    retPorts.push(port);
+                if(port.vendorId == GENUINO_VENDOR_ID && port.productId == GENUINO_PRODUCT_ID)
+                    if(port.path.indexOf("tty") > 0)
+                        retPorts.push(port);
+                    else if(window.navigator.appVersion.indexOf("Windows") > -1)
+                        retPorts.push(port);
+
             })
 
             fulfill(retPorts);
